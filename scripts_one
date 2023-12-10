@@ -2,6 +2,9 @@
 echo "Изменяем hostname VM"
 hostnamectl set-hostname wp-slave #Hostname VM
 systemctl restart systemd-hostnamed #перезапускаем службу
+cp ./rules.v4 /etc/iptables/rules.v4
+netfilter-persistent save
+iptables -L
 echo "Устанавливаем BD Mysql"
 apt install mysql-server-8.0 -y
 cp ./mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
