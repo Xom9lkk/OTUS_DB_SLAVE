@@ -7,8 +7,7 @@ nmcli con add type ethernet con-name 'static-ip' ifname enp0s3 ipv4.method manua
 nmcli con mod static-ip ipv4.dns 8.8.8.8
 nmcli con up id 'static-ip'
 cp rules.v4 /etc/iptables/rules.v4
-netfilter-persistent save
-iptables -L
+./rules.v4
 echo "Устанавливаем BD Mysql"
 apt install mysql-server-8.0 -y
 cp ./mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
