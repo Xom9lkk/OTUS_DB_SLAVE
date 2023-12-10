@@ -2,7 +2,11 @@
 echo "Изменяем hostname VM"
 hostnamectl set-hostname wp-slave #Hostname VM
 systemctl restart systemd-hostnamed #перезапускаем службу
-cp ./rules.v4 /etc/iptables/rules.v4
+nmcli connection show
+nmcli con add type ethernet con-name 'static-ip' ifname enp0s3 ipv4.method manual ipv4.addresses 192.168.0.105/24 gw4 192.168.0.1
+nmcli con mod static-ip ipv4.dns 8.8.8.8
+nmcli con up id 'static-ip'
+cp rules.v4 /etc/iptables/rules.v4
 netfilter-persistent save
 iptables -L
 echo "Устанавливаем BD Mysql"
