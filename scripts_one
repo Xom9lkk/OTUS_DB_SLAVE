@@ -1,18 +1,18 @@
 #!/bin/bash
 echo "Изменяем hostname VM"
-hostnamectl set-hostname wp-slave #Hostname VM
-systemctl restart systemd-hostnamed #перезапускаем службу
+hostnamectl set-hostname wp-slave 
+systemctl restart systemd-hostnamed
+echo "Устанавливаем статический IP адрес"
 nmcli connection show
 nmcli con add type ethernet con-name 'static-ip' ifname enp0s3 ipv4.method manual ipv4.addresses 192.168.0.105/24 gw4 192.168.0.1
 nmcli con mod static-ip ipv4.dns 8.8.8.8
 nmcli con up id 'static-ip'
-cp rules.v4 /etc/iptables/rules.v4
-./rules.v4
-echo "Устанавливаем BD Mysql"
+echo "Применяем правила IPTABLES"
+bash ./rules.v4
+echo "Устанавливаем базу данных Mysql"
 apt install mysql-server-8.0 -y
 cp ./mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl restart mysql
-sudo mysql
-CHANGE MASTER TO MASTER_HOST='192.168.0.104', MASTER_USER='repl', MASTER_PASSWORD='oTUSlave#2020', MASTER_LOG_FILE='binlog.000004', MASTER_LOG_POS=1014, GET_MASTER_PUBLIC_KEY = 1;
-START SLAVE;
-show slave status\G
+bash ./mysql_scripts
+echo "ПОДГОТОВКА SLAVE DB ОКОНЧЕНА"
+
