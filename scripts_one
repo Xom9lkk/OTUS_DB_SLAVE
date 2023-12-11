@@ -21,6 +21,7 @@ echo "Устанавливаем базу данных Mysql"
 apt install mysql-server-8.0 -y
 cp ./mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl restart mysql
+chmod 700 dumpmysql
 bash ./mysql_scripts
 echo "ПОДГОТОВКА SLAVE DB ОКОНЧЕНА"
 
